@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Secrets</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Most Popular Secrets</h1>
+      <a href="/home">View most recent</a>
+      {% for secret in secrets %}
+        <blockquote>
+          <p>"{{secret.secret}}"  {{secret.created_at}}  {{secret.sec_like.count}} Likes</p>
+          <footer><cite>{{author}}</cite></footer>
+          {% if currentUser.id == secret.user.id %}
+          <a href="/delete/popular/{{secret.id}}">Delete</a>
+          {% elif currentUser in secret.hasLiked %}
+            <p style="font-style: italic">You liked this</p>
+          {% else %}
+            <a href="/like/popular/{{secret.id}}">Like</a>
+          {% endif %}
+        </blockquote>
+      {% endfor %}
+        <form action="/submit" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <input type="textarea" class="form-control" name="secret" placeholder="Enter your secret here">
+            <input type="submit" class="btn btn-default" name="submit" value="Submit">
+          </div>
+        </form>
+
+    </div>
+  </body>
+</html>
